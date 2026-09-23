@@ -1,0 +1,206 @@
+/* ============================================================
+   Design tokens — independent light/dark palettes.
+   Every surface, text, and interactive color is a token here;
+   nothing else in the app should hard-code a color.
+   ============================================================ */
+
+:root {
+  /* Light theme (default) */
+  --color-bg: #fbfbfa;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-hover: #f1f1ef;
+  --color-surface-active: #e8e8e5;
+
+  --color-text: #1d1d1b;
+  --color-text-secondary: #5c5c58;
+  --color-text-tertiary: #8a8a85;
+  --color-heading: #141413;
+
+  --color-border: #e5e4e0;
+  --color-border-strong: #d3d2cc;
+
+  --color-link: #0f62a8;
+  --color-link-visited: #6b3fa0;
+
+  --color-accent: #b5501f;
+  --color-accent-contrast: #ffffff;
+  --color-accent-soft: #fbe9dd;
+
+  --color-selected-bg: #f3e4d8;
+  --color-selected-text: #7a3413;
+
+  --color-code-bg: #f4f3f0;
+  --color-code-border: #e5e4e0;
+  --color-code-text: #3a3a37;
+
+  --color-blockquote-bg: #f7f6f3;
+  --color-blockquote-border: #d3d2cc;
+
+  --color-table-header-bg: #f4f3f0;
+  --color-table-border: #e5e4e0;
+  --color-table-row-alt: #fafaf8;
+
+  --color-danger: #b3261e;
+  --color-danger-soft: #fbe9e7;
+  --color-success: #2e7d32;
+  --color-warning-soft: #fff4e0;
+
+  --color-scrollbar-thumb: #d3d2cc;
+  --color-scrollbar-thumb-hover: #b8b7b1;
+  --color-scrollbar-track: transparent;
+
+  --color-focus-ring: #0f62a8;
+
+  --color-modal-backdrop: rgba(20, 20, 19, 0.55);
+  --color-modal-surface: #1d1d1b;
+  --color-modal-text: #f2f2f0;
+
+  --color-toolbar-bg: rgba(251, 251, 250, 0.92);
+  --color-figure-bg: #f7f6f3;
+  --color-figure-border: #e5e4e0;
+
+  --shadow-sm: 0 1px 2px rgba(20, 20, 19, 0.06);
+  --shadow-md: 0 4px 16px rgba(20, 20, 19, 0.10);
+  --shadow-lg: 0 12px 40px rgba(20, 20, 19, 0.18);
+
+  --content-width-narrow: 620px;
+  --content-width-normal: 780px;
+  --content-width-wide: 980px;
+
+  --font-body: -apple-system, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-heading: var(--font-body);
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --transition-fast: 120ms ease;
+  --transition-base: 180ms ease;
+
+  color-scheme: light;
+}
+
+/* Explicit dark theme */
+:root[data-theme="dark"] {
+  --color-bg: #1a1a19;
+  --color-surface: #212120;
+  --color-surface-elevated: #262625;
+  --color-surface-hover: #2c2c2a;
+  --color-surface-active: #333331;
+
+  --color-text: #e8e7e3;
+  --color-text-secondary: #ada9a0;
+  --color-text-tertiary: #837f77;
+  --color-heading: #f5f4f0;
+
+  --color-border: #33322f;
+  --color-border-strong: #454340;
+
+  --color-link: #6fb2ee;
+  --color-link-visited: #b79ce6;
+
+  --color-accent: #e08a4f;
+  --color-accent-contrast: #1a1a19;
+  --color-accent-soft: #3a2a1c;
+
+  --color-selected-bg: #3a2a1c;
+  --color-selected-text: #f0b98a;
+
+  --color-code-bg: #26251f;
+  --color-code-border: #3a382f;
+  --color-code-text: #e3e0d5;
+
+  --color-blockquote-bg: #232220;
+  --color-blockquote-border: #454340;
+
+  --color-table-header-bg: #26251f;
+  --color-table-border: #33322f;
+  --color-table-row-alt: #201f1d;
+
+  --color-danger: #f2897f;
+  --color-danger-soft: #3a201c;
+  --color-success: #6fcf78;
+  --color-warning-soft: #362c1a;
+
+  --color-scrollbar-thumb: #454340;
+  --color-scrollbar-thumb-hover: #58564f;
+  --color-scrollbar-track: transparent;
+
+  --color-focus-ring: #6fb2ee;
+
+  --color-modal-backdrop: rgba(0, 0, 0, 0.7);
+  --color-modal-surface: #141413;
+  --color-modal-text: #f2f2f0;
+
+  --color-toolbar-bg: rgba(26, 26, 25, 0.92);
+  --color-figure-bg: #201f1d;
+  --color-figure-border: #33322f;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
+
+  color-scheme: dark;
+}
+
+/* System preference (only takes effect when data-theme="system") */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] {
+    --color-bg: #1a1a19;
+    --color-surface: #212120;
+    --color-surface-elevated: #262625;
+    --color-surface-hover: #2c2c2a;
+    --color-surface-active: #333331;
+
+    --color-text: #e8e7e3;
+    --color-text-secondary: #ada9a0;
+    --color-text-tertiary: #837f77;
+    --color-heading: #f5f4f0;
+
+    --color-border: #33322f;
+    --color-border-strong: #454340;
+
+    --color-link: #6fb2ee;
+    --color-link-visited: #b79ce6;
+
+    --color-accent: #e08a4f;
+    --color-accent-contrast: #1a1a19;
+    --color-accent-soft: #3a2a1c;
+
+    --color-selected-bg: #3a2a1c;
+    --color-selected-text: #f0b98a;
+
+    --color-code-bg: #26251f;
+    --color-code-border: #3a382f;
+    --color-code-text: #e3e0d5;
+
+    --color-blockquote-bg: #232220;
+    --color-blockquote-border: #454340;
+
+    --color-table-header-bg: #26251f;
+    --color-table-border: #33322f;
+    --color-table-row-alt: #201f1d;
+
+    --color-danger: #f2897f;
+    --color-danger-soft: #3a201c;
+    --color-success: #6fcf78;
+    --color-warning-soft: #362c1a;
+
+    --color-scrollbar-thumb: #454340;
+    --color-scrollbar-thumb-hover: #58564f;
+
+    --color-focus-ring: #6fb2ee;
+
+    --color-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --color-modal-surface: #141413;
+    --color-modal-text: #f2f2f0;
+
+    --color-toolbar-bg: rgba(26, 26, 25, 0.92);
+    --color-figure-bg: #201f1d;
+    --color-figure-border: #33322f;
+
+    color-scheme: dark;
+  }
+}

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Markdown Viewer</title>
+
+<link rel="stylesheet" href="assets/vendor/highlight/styles/github.min.css" media="(prefers-color-scheme: light)" id="hljs-theme-light" />
+<link rel="stylesheet" href="assets/vendor/highlight/styles/github-dark.min.css" media="(prefers-color-scheme: dark)" id="hljs-theme-dark" />
+<link rel="stylesheet" href="assets/vendor/katex/katex.min.css" />
+
+<link rel="stylesheet" href="assets/css/theme.css" />
+<link rel="stylesheet" href="assets/css/app.css" />
+</head>
+<body>
+
+<!-- Skip link -->
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<div id="app" class="app">
+
+  <!-- ===================== HEADER / TOOLBAR ===================== -->
+  <header class="toolbar" role="banner">
+    <div class="toolbar-group toolbar-start">
+      <button type="button" class="icon-btn" id="btn-toggle-sidebar" aria-label="Toggle file explorer" aria-expanded="true" aria-controls="sidebar" title="Toggle file explorer (Ctrl+B)">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+      </button>
+      <div class="brand">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" class="brand-mark"><path d="M4 4h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm1 2v12h14V6H5zm2 2h2l2.5 3L14 8h2v8h-2v-5l-2.5 3L9 11v5H7V8zm11 8v-6l2 2v4h-2z"/></svg>
+        <span class="brand-name">Markdown Viewer</span>
+      </div>
+    </div>
+
+    <div class="toolbar-group toolbar-center">
+      <nav class="breadcrumbs" id="breadcrumbs" aria-label="Document path"></nav>
+    </div>
+
+    <div class="toolbar-group toolbar-end">
+      <button type="button" class="btn" id="btn-open-file" title="Open a single Markdown file">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm0 2.5L18.5 9H14V4.5zM8 13h8v1.5H8V13zm0 3h8v1.5H8V16zm0-6h4v1.5H8V10z"/></svg>
+        <span>Open File</span>
+      </button>
+      <button type="button" class="btn" id="btn-open-folder" title="Open a folder of Markdown files">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M10 4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h6z"/></svg>
+        <span>Open Folder</span>
+      </button>
+      <button type="button" class="icon-btn" id="btn-search" aria-label="Search" title="Search (Ctrl+K)">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M10 2a8 8 0 1 0 4.9 14.32l5.39 5.38 1.42-1.41-5.39-5.39A8 8 0 0 0 10 2zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/></svg>
+      </button>
+      <button type="button" class="icon-btn" id="btn-toggle-outline" aria-label="Toggle document outline" aria-expanded="true" aria-controls="outline" title="Toggle outline">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 5h16v2H4V5zm4 6h12v2H8v-2zm0 6h12v2H8v-2zM4 11h2v2H4v-2zm0 6h2v2H4v-2z"/></svg>
+      </button>
+      <div class="menu" id="reading-settings-menu">
+        <button type="button" class="icon-btn" id="btn-reading-settings" aria-label="Reading settings" aria-haspopup="true" aria-expanded="false" title="Reading settings">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M13 3l.7 2.8a7 7 0 0 1 1.9 1.1l2.8-.9 2 3.4-2.2 1.9c.06.36.1.73.1 1.1s-.04.74-.1 1.1l2.2 1.9-2 3.4-2.8-.9a7 7 0 0 1-1.9 1.1L13 21h-4l-.7-2.8a7 7 0 0 1-1.9-1.1l-2.8.9-2-3.4 2.2-1.9A7 7 0 0 1 3.7 12c0-.37.04-.74.1-1.1L1.6 9l2-3.4 2.8.9a7 7 0 0 1 1.9-1.1L9 3h4zm-2 6a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+        </button>
+        <div class="popover" id="reading-settings-popover" role="menu" hidden>
+          <div class="popover-section">
+            <span class="popover-label">Theme</span>
+            <div class="segmented" id="theme-switch" role="radiogroup" aria-label="Theme">
+              <button type="button" class="segmented-btn" data-theme-choice="light" role="radio" aria-checked="false">Light</button>
+              <button type="button" class="segmented-btn" data-theme-choice="dark" role="radio" aria-checked="false">Dark</button>
+              <button type="button" class="segmented-btn" data-theme-choice="system" role="radio" aria-checked="false">System</button>
+            </div>
+          </div>
+          <div class="popover-section">
+            <span class="popover-label">Font size</span>
+            <div class="stepper">
+              <button type="button" class="icon-btn small" id="font-decrease" aria-label="Decrease font size">−</button>
+              <span id="font-size-value">16px</span>
+              <button type="button" class="icon-btn small" id="font-increase" aria-label="Increase font size">+</button>
+            </div>
+          </div>
+          <div class="popover-section">
+            <span class="popover-label">Content width</span>
+            <div class="segmented" id="width-switch" role="radiogroup" aria-label="Content width">
+              <button type="button" class="segmented-btn" data-width-choice="narrow" role="radio" aria-checked="false">Narrow</button>
+              <button type="button" class="segmented-btn" data-width-choice="normal" role="radio" aria-checked="false">Normal</button>
+              <button type="button" class="segmented-btn" data-width-choice="wide" role="radio" aria-checked="false">Wide</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="icon-btn" id="btn-fullscreen" aria-label="Toggle fullscreen" title="Toggle fullscreen">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 4h6v2H6v4H4V4zm10 0h6v6h-2V6h-4V4zM4 14h2v4h4v2H4v-6zm16 0v6h-6v-2h4v-4h2z"/></svg>
+      </button>
+      <div class="menu" id="more-menu">
+        <button type="button" class="icon-btn" id="btn-more" aria-label="More actions" aria-haspopup="true" aria-expanded="false" title="More">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+        </button>
+        <div class="popover" id="more-popover" role="menu" hidden>
+          <button type="button" class="btn btn-subtle" id="btn-show-shortcuts" role="menuitem" style="width:100%; justify-content:flex-start; margin-bottom:6px;">Keyboard shortcuts</button>
+          <button type="button" class="btn btn-subtle" id="btn-print" role="menuitem" style="width:100%; justify-content:flex-start;">Print / Export PDF</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== BODY LAYOUT ===================== -->
+  <div class="layout">
+
+    <!-- Sidebar scrim for mobile drawer -->
+    <div class="scrim" id="sidebar-scrim" hidden></div>
+    <div class="scrim" id="outline-scrim" hidden></div>
+
+    <!-- Edge handles to re-expand a collapsed panel -->
+    <button type="button" class="edge-peek edge-peek-left" id="edge-peek-sidebar" aria-label="Show file explorer" title="Show file explorer" hidden>
+      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <button type="button" class="edge-peek edge-peek-right" id="edge-peek-outline" aria-label="Show outline" title="Show outline" hidden>
+      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6 6 6"/></svg>
+    </button>
+
+    <!-- ===================== FILE EXPLORER ===================== -->
+    <aside class="sidebar" id="sidebar" aria-label="File explorer">
+      <div class="sidebar-header">
+        <span class="sidebar-title">Explorer</span>
+        <div class="sidebar-filter">
+          <input type="search" id="file-filter" placeholder="Filter files…" aria-label="Filter files" />
+        </div>
+      </div>
+      <div class="sidebar-body" id="file-tree">
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path d="M10 4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h6z"/></svg>
+          <p>No folder open</p>
+          <button type="button" class="btn btn-subtle" id="btn-open-folder-empty">Open Folder</button>
+        </div>
+      </div>
+      <div class="sidebar-resize-handle" id="sidebar-resize" aria-hidden="true"></div>
+    </aside>
+
+    <!-- ===================== MAIN CONTENT ===================== -->
+    <main class="content" id="main-content">
+      <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+      <div class="content-scroll" id="content-scroll">
+        <div class="content-inner" id="content-inner" style="--content-width: var(--content-width-normal)">
+          <div class="empty-state welcome-state" id="welcome-state">
+            <svg viewBox="0 0 24 24" width="48" height="48" aria-hidden="true"><path d="M4 4h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm1 2v12h14V6H5zm2 2h2l2.5 3L14 8h2v8h-2v-5l-2.5 3L9 11v5H7V8zm11 8v-6l2 2v4h-2z"/></svg>
+            <h1>Offline Markdown Viewer</h1>
+            <p>Open a single Markdown file, or an entire folder of documentation, to get started. Everything stays on this device — nothing is uploaded.</p>
+            <div class="welcome-actions">
+              <button type="button" class="btn btn-primary" id="btn-open-folder-welcome">Open Folder</button>
+              <button type="button" class="btn" id="btn-open-file-welcome">Open File</button>
+            </div>
+            <p class="welcome-hint" id="fsa-support-hint"></p>
+          </div>
+          <article id="markdown-content" class="markdown-body" hidden></article>
+        </div>
+      </div>
+      <button type="button" class="scroll-top-btn" id="btn-scroll-top" aria-label="Scroll to top" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 4l8 8-1.4 1.4L13 7.8V20h-2V7.8l-5.6 5.6L4 12z"/></svg>
+      </button>
+    </main>
+
+    <!-- ===================== DOCUMENT OUTLINE ===================== -->
+    <aside class="outline" id="outline" aria-label="Document outline">
+      <div class="outline-header">
+        <span class="outline-title">Outline</span>
+      </div>
+      <div class="outline-body" id="outline-body">
+        <div class="empty-state small">
+          <p>No headings yet</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="statusbar" id="statusbar">
+    <span id="status-file-count"></span>
+    <span id="status-word-count"></span>
+    <span class="statusbar-spacer"></span>
+    <span id="status-shortcuts-hint">Press <kbd>Ctrl</kbd>+<kbd>K</kbd> to search, <kbd>?</kbd> for shortcuts</span>
+  </footer>
+</div>
+
+<!-- ===================== SEARCH OVERLAY ===================== -->
+<div class="modal-overlay" id="search-overlay" hidden>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search">
+    <div class="search-input-row">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M10 2a8 8 0 1 0 4.9 14.32l5.39 5.38 1.42-1.41-5.39-5.39A8 8 0 0 0 10 2zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/></svg>
+      <input type="text" id="search-input" placeholder="Search current document or entire folder…" autocomplete="off" spellcheck="false" />
+      <div class="search-scope segmented" role="radiogroup" aria-label="Search scope">
+        <button type="button" class="segmented-btn active" data-search-scope="document" role="radio" aria-checked="true">This file</button>
+        <button type="button" class="segmented-btn" data-search-scope="folder" role="radio" aria-checked="false">All files</button>
+      </div>
+      <button type="button" class="icon-btn" id="btn-close-search" aria-label="Close search">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6.4 5L5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12 19 6.4 17.6 5 12 10.6z"/></svg>
+      </button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+</div>
+
+<!-- ===================== IMAGE / FIGURE VIEWER ===================== -->
+<div class="image-viewer" id="image-viewer" hidden role="dialog" aria-modal="true" aria-label="Image viewer">
+  <div class="image-viewer-toolbar">
+    <span class="image-viewer-caption" id="image-viewer-caption"></span>
+    <div class="image-viewer-controls">
+      <button type="button" class="icon-btn" id="iv-zoom-out" aria-label="Zoom out" title="Zoom out (-)">−</button>
+      <span class="image-viewer-zoom" id="iv-zoom-level">100%</span>
+      <button type="button" class="icon-btn" id="iv-zoom-in" aria-label="Zoom in" title="Zoom in (+)">+</button>
+      <button type="button" class="icon-btn" id="iv-fit" aria-label="Fit to screen" title="Fit to screen">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 4h6v2H6v4H4V4zm10 0h6v6h-2V6h-4V4zM4 14h2v4h4v2H4v-6zm16 0v6h-6v-2h4v-4h2z"/></svg>
+      </button>
+      <button type="button" class="icon-btn" id="iv-actual-size" aria-label="Actual size" title="Actual size (0)">1:1</button>
+      <button type="button" class="icon-btn" id="iv-close" aria-label="Close image viewer" title="Close (Esc)">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6.4 5L5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12 19 6.4 17.6 5 12 10.6z"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="image-viewer-stage" id="image-viewer-stage">
+    <img id="image-viewer-img" alt="" draggable="false" />
+  </div>
+</div>
+
+<!-- ===================== KEYBOARD SHORTCUTS MODAL ===================== -->
+<div class="modal-overlay" id="shortcuts-overlay" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title">
+    <div class="dialog-header">
+      <h2 id="shortcuts-title">Keyboard shortcuts</h2>
+      <button type="button" class="icon-btn" id="btn-close-shortcuts" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6.4 5L5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12 19 6.4 17.6 5 12 10.6z"/></svg>
+      </button>
+    </div>
+    <dl class="shortcuts-list">
+      <div><dt><kbd>Ctrl/Cmd</kbd>+<kbd>K</kbd></dt><dd>Open search</dd></div>
+      <div><dt><kbd>Ctrl/Cmd</kbd>+<kbd>B</kbd></dt><dd>Toggle file explorer</dd></div>
+      <div><dt><kbd>Ctrl/Cmd</kbd>+<kbd>O</kbd></dt><dd>Open folder</dd></div>
+      <div><dt><kbd>[</kbd> / <kbd>]</kbd></dt><dd>Previous / next document</dd></div>
+      <div><dt><kbd>+</kbd> / <kbd>-</kbd></dt><dd>Zoom in / out (image viewer)</dd></div>
+      <div><dt><kbd>0</kbd></dt><dd>Reset zoom (image viewer)</dd></div>
+      <div><dt><kbd>Esc</kbd></dt><dd>Close dialog / viewer</dd></div>
+      <div><dt><kbd>?</kbd></dt><dd>Show this help</dd></div>
+    </dl>
+  </div>
+</div>
+
+<div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+<!-- Vendored offline libraries -->
+<script src="assets/vendor/marked.min.js" defer></script>
+<script src="assets/vendor/purify.min.js" defer></script>
+<script src="assets/vendor/highlight/highlight.min.js" defer></script>
+<script src="assets/vendor/katex/katex.min.js" defer></script>
+<script src="assets/vendor/katex/auto-render.min.js" defer></script>
+<script src="assets/vendor/mermaid.min.js" defer></script>
+
+<!-- Application modules (load order matters: no bundler, plain globals) -->
+<script src="assets/js/theme.js" defer></script>
+<script src="assets/js/fs.js" defer></script>
+<script src="assets/js/markdown.js" defer></script>
+<script src="assets/js/outline.js" defer></script>
+<script src="assets/js/imageViewer.js" defer></script>
+<script src="assets/js/sidebar.js" defer></script>
+<script src="assets/js/search.js" defer></script>
+<script src="assets/js/app.js" defer></script>
+</body>
+</html>
