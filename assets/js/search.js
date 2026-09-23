@@ -124,17 +124,33 @@ const Search = (() => {
     indexing = false;
   }
 
+  function renderFilenameMatch(node) {
+    return `<div class="search-result-group">
+      <div class="search-result-file">${Markdown.escapeHtml(node.path)}</div>
+      <div class="search-result-item" data-path="${Markdown.escapeHtml(node.path)}" data-occurrence="-1" data-query="">
+        <div class="search-result-heading">${Markdown.escapeHtml(node.name)}</div>
+        <div class="search-result-context">Filename match — open this file</div>
+      </div>
+    </div>`;
+  }
+
   async function searchFolder(query) {
     resultsEl.innerHTML = '<div class="search-empty">Indexing files…</div>';
     await ensureFolderIndex();
     const files = FS.allMarkdownFiles();
+    const q = query.toLowerCase();
     let html = '';
     let total = 0;
     for (const node of files) {
       const text = docTextCache.get(node.path) || '';
       const matches = findMatches(text, query);
-      total += matches.length;
-      html += renderGroup(node.path, node, query, matches, () => text);
+      if (matches.length) {
+        total += matches.length;
+        html += renderGroup(node.path, node, query, matches, () => text);
+      } else if (node.name.toLowerCase().includes(q)) {
+        total += 1;
+        html += renderFilenameMatch(node);
+      }
     }
     resultsEl.innerHTML = total ? html : `<div class="search-empty">No matches for "${Markdown.escapeHtml(query)}" in this folder.</div>`;
     wireResultClicks();
