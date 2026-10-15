@@ -251,7 +251,7 @@ svg { fill: currentColor; flex-shrink: 0; }
   width: 0%; z-index: 30; transition: width 80ms linear;
 }
 .content-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; }
-.content-inner { max-width: var(--content-width, var(--content-width-normal)); margin: 0 auto; padding: 40px 32px 120px; }
+.content-inner { width: 100%; box-sizing: border-box; max-width: var(--content-width, var(--content-width-normal)); margin: 0 auto; padding: 40px 32px 120px; }
 
 .scroll-top-btn {
   position: absolute; right: 24px; bottom: 24px;

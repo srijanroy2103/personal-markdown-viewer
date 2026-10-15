@@ -64,9 +64,9 @@
   --shadow-md: 0 4px 16px rgba(20, 20, 19, 0.10);
   --shadow-lg: 0 12px 40px rgba(20, 20, 19, 0.18);
 
-  --content-width-narrow: 620px;
-  --content-width-normal: 780px;
-  --content-width-wide: 980px;
+  --content-width-narrow: 780px;
+  --content-width-normal: 100%;
+  --content-width-wide: 100%;
 
   --font-body: -apple-system, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-heading: var(--font-body);

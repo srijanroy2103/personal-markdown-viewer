@@ -59,7 +59,10 @@ const Outline = (() => {
       const link = body.querySelector(`.outline-link[data-outline-id="${CSS.escape(activeId)}"]`);
       if (link) {
         link.classList.add('active');
-        link.scrollIntoView({ block: 'nearest' });
+        // Scroll only the outline list; scrollIntoView would also scroll clipped ancestors and re-reveal a collapsed panel.
+        const top = link.offsetTop - body.offsetTop;
+        if (top < body.scrollTop) body.scrollTop = top;
+        else if (top + link.offsetHeight > body.scrollTop + body.clientHeight) body.scrollTop = top + link.offsetHeight - body.clientHeight;
       }
     }
 

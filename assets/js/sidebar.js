@@ -141,7 +141,10 @@ const Sidebar = (() => {
     if (rowEls.has(path)) {
       const row = rowEls.get(path);
       row.classList.add('selected');
-      row.scrollIntoView({ block: 'nearest' });
+      // Scroll only the tree; scrollIntoView would re-reveal a collapsed sidebar.
+      const r = row.getBoundingClientRect(), t = treeEl.getBoundingClientRect();
+      if (r.top < t.top) treeEl.scrollTop -= t.top - r.top;
+      else if (r.bottom > t.bottom) treeEl.scrollTop += r.bottom - t.bottom;
     }
   }
 
